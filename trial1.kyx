@@ -67,7 +67,8 @@ Problem
           & yA >= yD & t <= T
     };
     
-    ?(t = T); /* or passed */
+    ?(true);
+    /* ?(t = T); or passed */
   >(
       /*Safety Conditions*/
       diff > 0 & t = T
