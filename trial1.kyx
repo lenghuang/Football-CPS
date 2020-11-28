@@ -25,15 +25,25 @@ ProgramVariables
  Real currtime;
 
 End.
-/* testing github */
+
+
+/*
+Diff = 23.7 - 22.5 = 1.2 (or OL - DL, since DL is faster)
+Football is 300ft x 160ft
+maxVel for DL is ceil(23.7) = 24 
+*/
+
+/* Measuring in yards */
+
 Problem
   /* fill in dL formula here */
   /*pre-conditions*/
   (
-      Diff > 0 & T = 40 
-      & yA < yD & 50 = yA & yD < 100
-      & maxVel > 0 
+      Diff = 0.26 & T = 40 
+      & yA = 150 & yD = yA + 1
+      & maxVel = 24 
       & 0 < diff & diff < Diff
+      & dyA = 1 & dyD = -1
       )
   ->
   <
@@ -56,11 +66,18 @@ Problem
           yA' = dyA*vyA + dyD*vyD, yD' = dyA*vyA + dyD*vyD, t' = 1 
           & yA >= yD & t <= T
     };
-    ?(t = T);
+    
+    ?(t = T); /* or passed */ 
+    ?(0 <= yA & yA <= 300); /* angel still on the field */
+    ?(0 <= yD & yD <= 300); /* demon still on the field */
+    ?(0 <= yQB & yQB <= 300); /* QB still on the field */
   
   >(
       diff > 0 & t = T
+      & yQB < yD
       /*Safety Conditions*/
+      
+      /* (Ball Not Passed -> yQB < yD) or (Ball Passed -> Ball Catched) */
       )
 End.
 End.
