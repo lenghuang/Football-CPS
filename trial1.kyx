@@ -39,8 +39,8 @@ Problem
   /* fill in dL formula here */
   /*pre-conditions*/
   (
-      Diff = 0.26 & T = 40 
-      & yA = 150 & yD = yA + 1 & yQB = yA - 5
+      Diff = 1.2 & T = 40 
+      & yA = 150 & yD = yA + 1 & yQB = yA - 15
       & maxVel = 24 
       & 0 < diff & diff < Diff
       & dyA = 1 & dyD = -1
@@ -56,7 +56,6 @@ Problem
   vyA := vyD - diff; /* OL's strength/velocity is always less than DL's */
   t:= 0;
   
-  
     {
           yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
           & yA < yD & t <= T
@@ -67,11 +66,12 @@ Problem
           & yA >= yD & t <= T
     };
     
-    ?(true);
+    ?(t = T);
+    
     /* ?(t = T); or passed */
   >(
       /*Safety Conditions*/
-      diff > 0 & t = T
+      diff > 0
       & yQB < yD
       /* (Ball Not Passed -> yQB < yD) or (Ball Passed -> Ball Catched) */
       & 0 <= yA & yA <= 300 /* angel still on the field */
