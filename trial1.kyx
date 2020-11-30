@@ -22,7 +22,6 @@ ProgramVariables
  Real dyQB; /*direction of velocity in y-direction of the Quarter Back*/
  
  Real t; /*running time of the play*/
- Real currtime;
 
 End.
 
@@ -39,28 +38,25 @@ Problem
   /* fill in dL formula here */
   /*pre-conditions*/
   (
-      Diff = 1.2 & T = 40 
-      & yA = 150 & yD = yA + 1 & yQB = yA - 15
-      & maxVel = 24 
-      & 0 < diff & diff < Diff
+      Diff = 2 & T = 40 
+      & yA = 150 & yD = yA + 3 & yQB = yA - 15
+      & maxVel = 24 & vyD = maxVel /* hardcode maxVel for now */
+      /*& 0 < diff & diff < Diff*/
       & dyA = 1 & dyD = -1
       & vyQB = 9 & dyQB = -1
       )
   ->
   <
-  
-  {
-      vyD := *; /*non-deterministically choosing DL's strength/velocity*/
-      ?(0 < vyD & vyD < maxVel); /* ensuring realistic velocity */
-  }^@
-  
-  vyA := vyD - diff; /* OL's strength/velocity is always less than DL's */
+ 
+  vyA := vyD - Diff; /* OL's strength/velocity is always less than DL's */
   t:= 0;
   
+
     {
           yQB' = dyQB*vyQB, yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
           & yA < yD & t <= T
     };
+    
     
 
     {
@@ -72,8 +68,7 @@ Problem
     /* ?(t = T); or passed */
   >(
       /*Safety Conditions*/
-      diff > 0
-      & yQB < yD
+      yQB < yD
       /* (Ball Not Passed -> yQB < yD) or (Ball Passed -> Ball Catched) */
       & 0 <= yA & yA <= 300 /* angel still on the field */
       & 0 <= yD & yD <= 300 /* demon still on the field */
