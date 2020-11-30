@@ -41,32 +41,28 @@ Problem
   (
       Diff = 1.2 & T = 40 
       & yA = 150 & yD = yA + 1 & yQB = yA - 15
-      & maxVel = 24 
-      & 0 < diff & diff < Diff
-      & dyA = 1 & dyD = -1
+      & vyQB = 9 /* walking speed */ 
+      & maxVel = 24 & (0 < vyD & vyD < maxVel)
+      /*& 0 < diff & diff < Diff*/
+      & dyA = 1 & dyD = -1 & dyQB = -1
       )
   ->
   <
-  
-  {
-      vyD := *; /*non-deterministically choosing DL's strength/velocity*/
-      ?(0 < vyD & vyD < maxVel); /* ensuring realistic velocity */
-  }^@
-  
-  vyA := vyD - diff; /* OL's strength/velocity is always less than DL's */
+ 
+  vyA := vyD - Diff; /* OL's strength/velocity is always less than DL's */
   t:= 0;
   
     {
-          yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
+          yQB'= dyQB*vyQB, yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
           & yA < yD & t <= T
-    };
+    }
     
+    /*
     {
-          yA' = dyA*vyA + dyD*vyD, yD' = dyA*vyA + dyD*vyD, t' = 1 
+          yQB'= dyQB*vyQB, yA' = dyA*vyA + dyD*vyD, yD' = dyA*vyA + dyD*vyD, t' = 1 
           & yA >= yD & t <= T
-    };
-    
-    ?(t = T);
+    }
+    */
     
     /* ?(t = T); or passed */
   >(
