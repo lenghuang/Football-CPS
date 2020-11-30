@@ -1,5 +1,4 @@
 ArchiveEntry "STAR LAB TRIAL 0"
-
 Definitions
  Real Diff; /* maximum difference in strength of offensive and defensive line*/
  Real T; /*Time bound of a play, 40 seconds*/
@@ -10,50 +9,69 @@ ProgramVariables
  
  Real maxVel; /* maximum realistic velocity */
  
- Real yD; /*y-position of the offensive / defensive line (Demon)*/
+ Real yA; /*y-position of the offensive line (Angel-team)*/
+ Real vyA; /*magnitude of velocity in y-direction of the offensive line*/
+ Real dyA; /*direction of velocity in y-direction of the offensive line*/
+ 
+ Real yD; /*y-position of the defensive line (Demon)*/
  Real vyD; /*magnitude of velocity in y-direction of the defensive line*/
  Real dyD; /*direction of velocity in y-direction of the defensive line*/
  
- Real yQB; /*y-position of the Quarterback (Angel-team)*/
- Real vQB; /*magnitude of velocity in y-direction of the Quarterback*/
- Real dxQB; /*magnitude of velocity in y-direction of the Quarterback*/
- Real dyQB; /*direction of velocity in y-direction of the Quarterback*/
+ Real yQB; /*y-position of the Quarter Back (Angel-team)*/
+ Real vyQB; /*magnitude of velocity in y-direction of the Quarter Back*/
+ Real dyQB; /*direction of velocity in y-direction of the Quarter Back*/
  
  Real t; /*running time of the play*/
- Real currtime;
 
 End.
 
 
 /*
-Diff = 23.7 - 22.5 = 1.2 (or OL - DL, since DL is faster)
-Football is 300ft x 160ft
-maxVel for DL is ceil(23.7) - floor(22.5) = 24 - 22
-Average walking speed is ceil(8.2) ft per sec
+
+Note about "realism":
+
+Average OL Speed = 22.5
+Average DL Speed = 23.7
+Upper Bound on DL Speed = ceil(23.7) = 24
+Upper Bound on Average Difference = ceil(23.7) - floor(22.5) = 24 - 22 = 2
+Football field is 300ft x 160ft
+
 */
 
-/* Measuring in yards */
-
 Problem
-  /* fill in dL formula here */
-  /*pre-conditions*/
+  /* Pre-Conditions */
   (
-      T = 5 
-      & yD = 150 & yQB = yD - 15
-      & vQB = 9 & vyD = 9
-      /*& maxVel = 2 & (0 < vyD & vyD < maxVel)*/
-      & dyD = -1 & dyQB = -1
+      Diff = 2 & T = 40 /* Max Difference + Play Clock, T */
+      & 15 < yA & yA < 300 /* Start anywhere after 3 yard line */
+      & yD = yA /* OL/DL start as intersecting */
+      & yQB = yA - 15 /* QB is 3 yards behind OL */
+      & maxVel = 24 /* realistic speed for DL */
+      & 0 < diff & diff < Diff /* realistic decrement for OL speed */
+      & dyA = 1 & dyD = -1 /* angel moves "up" the field demon moves "down" */
+      & vyQB = 9 & dyQB = -1 /* for now, QB moves down. Walking speed ~9ft/s */
       )
   ->
   <
-  t:= 0;
+    /* Let defense / demon choose a speed for their DL */
     {
-          yQB' = dyQB*vQB, yD' = dyD*vyD, t' = 1 
-          & t <= T
+      vyD := *; /* do it non-deterministically */
+      ?(0 < vyD & vyD < maxVel); /* ensure realistic velocity */
+    }^@
+
+    vyA := vyD - diff; /* On average, OL slower than DL */
+    t:= 0;
+    
+    /* QB moves backwards, and both OL and DL move down at a dampened speed */
+    /* Eventually, there will be a controller for directional QB movement */
+    {
+      yQB' = dyQB*vyQB, yA' = dyA*vyA + dyD*vyD, yD' = dyA*vyA + dyD*vyD, t' = 1 
+      & t <= T
     }
-  >(
-      /*Safety Conditions*/
-      yQB < yD
+  >  
+     /*Safety Conditions*/
+     (
+      yQB < yD /* QB not tackled yet */
+      & 0 <= yA & yA <= 300 /* angel still on the field */
       & 0 <= yD & yD <= 300 /* demon still on the field */
       & 0 <= yQB & yQB <= 300 /* QB still on the field */
       )
