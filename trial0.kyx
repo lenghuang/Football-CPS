@@ -64,7 +64,7 @@ Problem
     /* QB moves backwards, and both OL and DL move down at a dampened speed */
     /* Eventually, there will be a controller for directional QB movement */
     {
-      yQB' = dyQB*vyQB, yA' = dyA*vyA + dyD*vyD, yD' = dyA*vyA + dyD*vyD, t' = 1 
+      yQB' = dyQB*vyQB, yA' = 0.5*(dyA*vyA + dyD*vyD), yD' = 0.5*(dyA*vyA + dyD*vyD), t' = 1 
       & t <= T
     }
   >  
