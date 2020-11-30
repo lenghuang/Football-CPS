@@ -1,6 +1,6 @@
 ﻿/* Exported from KeYmaera X v4.9.1 */
 
-Theorem "STAR LAB TRIAL 0"
+Theorem "StarLab_Len_Megha_Proof.kyx"
 Definitions
  Real Diff; /* maximum difference in strength of offensive and defensive line*/
  Real T; /*Time bound of a play, 40 seconds*/
