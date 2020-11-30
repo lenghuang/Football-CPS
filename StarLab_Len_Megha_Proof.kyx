@@ -1,6 +1,6 @@
-﻿/* Exported from KeYmaera X v4.9.1 */
+/* Exported from KeYmaera X v4.9.1 */
 
-Theorem "StarLab_Len_Megha_Proof.kyx"
+Theorem "StarLab_Len_Megha_Proof"
 Definitions
  Real Diff; /* maximum difference in strength of offensive and defensive line*/
  Real T; /*Time bound of a play, 40 seconds*/
@@ -66,7 +66,7 @@ Problem
     /* QB moves backwards, and both OL and DL move down at a dampened speed */
     /* Eventually, there will be a controller for directional QB movement */
     {
-      yQB' = dyQB*vyQB, yA' = dyA*vyA + dyD*vyD, yD' = dyA*vyA + dyD*vyD, t' = 1 
+      yQB' = dyQB*vyQB, yA' = 0.5*(dyA*vyA + dyD*vyD), yD' = 0.5*(dyA*vyA + dyD*vyD), t' = 1 
       & t <= T
     }
   >  
@@ -80,7 +80,7 @@ Problem
 End.
 
 Tactic "STAR LAB 0: Proof"
-unfold ; solve(1.1) ; assignd(1) ; QE
+unfold ; solve(1.1) ; assignd(1) ; auto
 End.
 
 End.
