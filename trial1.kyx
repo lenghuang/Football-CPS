@@ -54,7 +54,7 @@ Problem
 
     {
           yQB' = dyQB*vyQB, yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
-          & yA < yD & t <= T
+          & yA <= yD & t <= T
     };
     
     
