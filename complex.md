@@ -6,3 +6,8 @@
 - Curved OLine
 - WR runs from line of scrimmage.. We can only throw in a range say 70-80 yards, to ensure we get as far as possible, but also, ensure that we can actually send the ball
 - Generalize the starting position (issues --> if we are too close to 0, QB might run off the field, if we are too close to 300, there is less space to run forward)
+
+### Common Bugs:
+- Lower bound by lower case `diff`
+- Not expanding definitions 
+- Forgetting that you hard coded `maxVel = vyD`
