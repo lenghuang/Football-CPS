@@ -1,0 +1,83 @@
+﻿/* Exported from KeYmaera X v4.9.0 */
+
+Theorem "STAR LAB TRIAL 1"
+Definitions
+ Real Diff; /* maximum difference in strength of offensive and defensive line*/
+ Real T; /*Time bound of a play, 40 seconds*/
+End.
+
+ProgramVariables
+ Real diff; /* difference in the strength of offernsive and defensive line*/
+ 
+ Real maxVel; /* maximum realistic velocity */
+ 
+ Real yA; /*y-position of the offensive line (Angel-team)*/
+ Real vyA; /*magnitude of velocity in y-direction of the offensive line*/
+ Real dyA; /*direction of velocity in y-direction of the offensive line*/
+ 
+ Real yD; /*y-position of the defensive line (Demon)*/
+ Real vyD; /*magnitude of velocity in y-direction of the defensive line*/
+ Real dyD; /*direction of velocity in y-direction of the defensive line*/
+ 
+ Real yQB; /*y-position of the Quarter Back (Angel-team)*/
+ Real vyQB; /*magnitude of velocity in y-direction of the Quarter Back*/
+ Real dyQB; /*direction of velocity in y-direction of the Quarter Back*/
+ 
+ Real t; /*running time of the play*/
+
+End.
+
+
+/*
+Diff = 23.7 - 22.5 = 1.2 (or OL - DL, since DL is faster)
+Football is 300ft x 160ft
+maxVel for DL is ceil(23.7) = 24 
+*/
+
+/* Measuring in yards */
+
+Problem
+  /* fill in dL formula here */
+  /*pre-conditions*/
+  (
+      Diff = 2 & T = 40 
+      & yA = 150 & yD = yA + 3 & yQB = yA - 15
+      & maxVel = 24 & vyD = maxVel /* hardcode maxVel for now */
+      /*& 0 < diff & diff < Diff*/
+      & dyA = 1 & dyD = -1
+      & vyQB = 9 & dyQB = -1
+      )
+  ->
+  <
+ 
+  vyA := vyD - Diff; /* OL's strength/velocity is always less than DL's */
+  t:= 0;
+  
+
+    {
+          yQB' = dyQB*vyQB, yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
+          & yA <= yD & t <= T
+    };
+
+    {
+          yQB' = dyQB*vyQB, yD' = (dyA*vyA + dyD*vyD)/2, t' = 1 
+          & yA >= yD & t <= T
+    }
+
+
+    /* ?(t = T); or passed */
+  >(
+      /*Safety Conditions*/
+      yQB < yD
+      /* (Ball Not Passed -> yQB < yD) or (Ball Passed -> Ball Catched) */
+      /* & 0 <= yA & yA <= 300 angel still on the field */
+      & 0 <= yD & yD <= 300 /* demon still on the field */
+      & 0 <= yQB & yQB <= 300 /* QB still on the field */
+      )
+End.
+
+Tactic "STAR LAB TRIAL 1: Proof"
+composed(1.1) ; composed(1.1.1) ; assignd(1.1) ; assignd(1.1) ; composed(1.1.0.1) ; solve(1.1.0.1) ; solve(1.1.0.1.0.1.1.0.1.0.1.0.1) ; unfold ; auto
+End.
+
+End.
