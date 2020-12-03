@@ -7,27 +7,27 @@ Definitions
  Real Diff = 2; /* maximum difference in strength of offensive and defensive line*/
  Real T = 40; /* time bound of a play, 40 seconds*/
 
- Real dyA = 1; /* direction of velocity in y-direction of the offensive line*/ 
+ Real dyA = 1; /* direction of velocity in y-direction of the offensive line*/
  Real dyD = -1; /* direction of velocity in y-direction of the defensive line*/
- Real dyQB = -1; /* direction of velocity in y-direction of the Quarter Back*/ 
+ Real dyQB = -1; /* direction of velocity in y-direction of the Quarter Back*/
 
 End.
 
 ProgramVariables
 
- Real diff; /* Difference in the strength of offernsive and defensive line*/
- 
+ Real diff; /* Difference in the strength of offensive and defensive line*/
+
  Real maxVel; /* maximum realistic velocity */
- 
+
  Real yA; /* y-position of the offensive line (Angel-team)*/
  Real vyA; /* magnitude of velocity in y-direction of the offensive line*/
- 
+
  Real yD; /* y-position of the defensive line (Demon)*/
  Real vyD; /* magnitude of velocity in y-direction of the defensive line*/
- 
+
  Real yQB; /* y-position of the Quarter Back (Angel-team)*/
  Real vyQB; /* magnitude of velocity in y-direction of the Quarter Back*/
- 
+
  Real t; /* Running time of the play*/
 
 End.
@@ -35,23 +35,23 @@ End.
 Problem
   ( yA = 150 & yD = yA + 3 & yQB = yA - 15
   & maxVel = 24 & vyD = maxVel /* hardcode maxVel for now */
-  /*& 0 < diff & diff < Diff*/
+  & 0 < diff & diff < Diff
   & vyQB = 9 ) ->
   <
-    vyA := vyD - Diff; /* OL's strength/velocity is always less than DL's */
+    vyA := vyD - diff; /* OL's strength/velocity is always less than DL's */
     t:= 0;
-  
+
     {
-      yQB' = dyQB*vyQB, yA' = dyA*vyA, yD' = dyD*vyD, t' = 1 
+      yQB' = dyQB*vyQB, yA' = dyA*vyA, yD' = dyD*vyD, t' = 1
       & yA <= yD & t <= T
     };
-    
+
     {
-      yQB' = dyQB*vyQB, yD' = (dyA*vyA + dyD*vyD)/2, t' = 1 
+      yQB' = dyQB*vyQB, yD' = (dyA*vyA + dyD*vyD)/2, t' = 1
       & yA >= yD & t <= T
     }
   >( yQB < yD
-     /* (Ball Not Passed -> yQB < yD) or (Ball Passed -> Ball Catched) */
+     /* (Ball Not Passed -> yQB < yD) or (Ball Passed -> Ball Caught) */
      /* & 0 <= yA & yA <= 300 angel still on the field */
    & 0 <= yD & yD <= 300 /* demon still on the field */
    & 0 <= yQB & yQB <= 300 /* QB still on the field */

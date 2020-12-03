@@ -7,22 +7,22 @@ Definitions
 End.
 
 ProgramVariables
- Real diff; /* difference in the strength of offernsive and defensive line*/
- 
+ Real diff; /* difference in the strength of offensive and defensive line*/
+
  Real maxVel; /* maximum realistic velocity */
- 
+
  Real yA; /*y-position of the offensive line (Angel-team)*/
  Real vyA; /*magnitude of velocity in y-direction of the offensive line*/
  Real dyA; /*direction of velocity in y-direction of the offensive line*/
- 
+
  Real yD; /*y-position of the defensive line (Demon)*/
  Real vyD; /*magnitude of velocity in y-direction of the defensive line*/
  Real dyD; /*direction of velocity in y-direction of the defensive line*/
- 
+
  Real yQB; /*y-position of the Quarter Back (Angel-team)*/
  Real vyQB; /*magnitude of velocity in y-direction of the Quarter Back*/
  Real dyQB; /*direction of velocity in y-direction of the Quarter Back*/
- 
+
  Real t; /*running time of the play*/
 
 End.
@@ -62,14 +62,14 @@ Problem
 
     vyA := vyD - diff; /* On average, OL slower than DL */
     t:= 0;
-    
+
     /* QB moves backwards, and both OL and DL move down at a dampened speed */
     /* Eventually, there will be a controller for directional QB movement */
     {
-      yQB' = dyQB*vyQB, yA' = 0.5*(dyA*vyA + dyD*vyD), yD' = 0.5*(dyA*vyA + dyD*vyD), t' = 1 
+      yQB' = dyQB*vyQB, yA' = 0.5*(dyA*vyA + dyD*vyD), yD' = 0.5*(dyA*vyA + dyD*vyD), t' = 1
       & t <= T
     }
-  >  
+  >
      /*Safety Conditions*/
      (
       yQB < yD /* QB not tackled yet */
