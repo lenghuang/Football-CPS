@@ -1,5 +1,7 @@
 # Models: Keymaera X Files and Proofs
 
+Folder for Keymaera X models
+
 - `trial0.kyx`: Discount follow the leader
 - `trial0_Proof.kyx`: Initial dumbed down proof
 - `trial1.kyx`: Line collision / dampening model
