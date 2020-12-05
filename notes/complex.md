@@ -8,6 +8,7 @@
 - Generalize the starting position (issues --> if we are too close to 0, QB might run off the field, if we are too close to 300, there is less space to run forward)
 - Instead of WR Open <=> pass, can calculate distance / time needed for a ball to travel for some velocity within the loop guard
 - Another idea for WR Open : making it a function, and having it = prev def of Open & y >= 240
+- Possibly introduce changing dy and vy, using controller first and then dy' and vy'
 
 ### Common Bugs:
 - Lower bound by lower case `diff`
