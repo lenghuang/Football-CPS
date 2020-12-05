@@ -13,8 +13,8 @@ Definitions
  Real dyLB = 1; /* line backer follows wide receiver (up)*/
  
  /* Helper Functions */
- Bool onField(Real y) = 0 <= y & y <= 300 /* Player is on the field */
- Bool isOpen(Real yWR, Real yLB, Real buffer) = yLB + buffer < yWR /* WR ran past LB */
+ Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
+ Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
 
 End.
 
@@ -39,8 +39,6 @@ ProgramVariables
  
  Real yLB; /* y-position of the linebacker (Demon-team) */
  Real vyLB; /* magnitude of velocity in y-direction of the linebacker */
- 
- Bool playEnd; /* ?? is this needed */
 
  Real t; /* Running time of the play*/
 
