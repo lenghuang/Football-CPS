@@ -47,9 +47,9 @@ ProgramVariables
 End.
 
 Problem
-  ( yA  = 150 /* start at center */
-  & yD  = yA + 3 /* defense a yard above */
-  & yQB = yA - 15 /* quarterback 5 yards back */ /* change this order later */
+  ( 0 <= yQB & yQB <= 150 /* Quarterback is in the back half of the field */
+  & yA = yQB + 15 /* OL starts 5 yards above QB */
+  & yD = yA + 3 /* DL starts 1 yard above OL */
   & yWR = yA /* Start at line of scrimmage with OL */
   & yLB = yD /* Start at line of scrimmage with DL (depends on strategy) */
   & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
@@ -95,7 +95,7 @@ Problem
 End.
 
 Tactic "STAR LAB TRIAL 2: Proof"
-expandAllDefs ; unfold ; composed(1.1) ; solve(1.1.1) ; solve(1.1) ; assignd(1) ; auto
+expandAllDefs ; unfold ; assignd(1) ; composed(1) ; solve(1.1) ; solve(1) ; auto
 End.
 
 End.

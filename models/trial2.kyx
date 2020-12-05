@@ -3,7 +3,7 @@ ArchiveEntry "STAR LAB TRIAL 2"
 Definitions
 
  Real Diff = 2; /* maximum difference in faceups between OL/DL or WR/LB */
- Real T = 40; /* time bound of a play, 40 seconds */
+ Real T = 40; /* time bound of a play, 40 secondsx*/
 
  /* Direction of velocity in y-direction */
  Real dyQB = -1; /* quarterback goes down */
@@ -45,9 +45,9 @@ ProgramVariables
 End.
 
 Problem
-  ( yA  = 150 /* start at center */
-  & yD  = yA + 3 /* defense a yard above */
-  & yQB = yA - 15 /* quarterback 5 yards back */ /* change this order later */
+  ( 0 <= yQB & yQB <= 150 /* Quarterback is in the back half of the field */
+  & yA = yQB + 15 /* OL starts 5 yards above QB */
+  & yD = yA + 3 /* DL starts 1 yard above OL */
   & yWR = yA /* Start at line of scrimmage with OL */
   & yLB = yD /* Start at line of scrimmage with DL (depends on strategy) */
   & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
