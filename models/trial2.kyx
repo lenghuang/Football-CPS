@@ -86,8 +86,8 @@ Problem
     & t <= T /* Realism */
     }
     
-  >( yQB < yD /* QB not tackled */
-   & yLB + buffer < yWR /* "Instantly" passed */
+  >( yQB < yD /* QB unhurt */
+   & isOpen(yWR, yLB, buffer) /* Passed (assuming pass <=> open) */
    & onField(yQB) & onField(yD) 
    & onField(yWR) & onField(yLB)
    & t <= T /* Within 40 second play clock */
