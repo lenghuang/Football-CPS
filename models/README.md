@@ -6,3 +6,4 @@ Folder for Keymaera X models
 - `trial0_Proof.kyx`: Initial dumbed down proof
 - `trial1.kyx`: Line collision / dampening model
 - `trial1_Proof.kyx`: Simplified line collision proof
+- `trial2.kyx`: Introducing WR / LB
