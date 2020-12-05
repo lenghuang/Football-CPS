@@ -16,8 +16,7 @@ Definitions
 
  /* Helper Functions */
  Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
- /* Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
- Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB < yWR; /* WR ran past LB */
+ Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
 
 End.
 
@@ -55,10 +54,10 @@ Problem
   & yLB = yD /* Start at line of scrimmage with DL (depends on strategy) */
   & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
   & 0 < diffPass & diffPass < Diff /* offset the WR/LB */
-  /*& buffer = 0*/
+  & buffer = 0
   & vyQB = 9 /* Walking speed in ft/s */
-  & vyD  = 24 /* 15.18  /* Avg for DL in ft/s from combine */
-  & vyWR = 24 /* Avg for WR in ft/s from combine */
+  & vyD  = 15.18 /* Avg for DL in ft/s from combine */
+  & vyWR = 13.44 /* Avg for WR in ft/s from combine */
   ) ->
   <
     vyA  := vyD  - diffLine; /* OL's strength/velocity is always less than DL's */
@@ -88,15 +87,15 @@ Problem
     }
 
   >( yQB < yD /* QB unhurt */
-   /* & isOpen(yWR, yLB, buffer) /* Passed (assuming pass <=> open) */
+   & isOpen(yWR, yLB, buffer) /* Passed (assuming pass <=> open) */
    & onField(yQB) & onField(yD)
-   /* & onField(yWR) & onField(yLB)*/
-   /* & t <= T /* Within 40 second play clock */
+   & onField(yWR) & onField(yLB)
+   & t <= T /* Within 40 second play clock */
    )
 End.
 
 Tactic "STAR LAB TRIAL 2: Proof"
-expandAllDefs ; unfold ; assignd(1) ; composed(1) ; solve(1.1) ; solve(1) ; auto
+expandAllDefs ; unfold ; composed(1.1) ; solve(1.1.1) ; solve(1.1) ; assignd(1) ; auto
 End.
 
 End.
