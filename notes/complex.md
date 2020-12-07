@@ -14,3 +14,7 @@
 - Lower bound by lower case `diff`
 - Not expanding definitions 
 - Forgetting that you hard coded `maxVel = vyD`
+
+### Notes for Paper: 
+
+- Have a paragraph for explaining Domain Constraints and why we have them in place
