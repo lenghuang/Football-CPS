@@ -1,0 +1,98 @@
+ArchiveEntry "STAR LAB TRIAL 2"
+
+Definitions
+
+ Real Diff = 2; /* maximum difference in faceups between OL/DL or WR/LB */
+ Real T = 40; /* time bound of a play, 40 secondsx*/
+
+ /* Direction of velocity in y-direction */
+ Real dyQB = -1; /* quarterback goes down */
+ Real dyA = 1; /* offensive line goes up */
+ Real dyD = -1; /* defensive line collides against OL (down) */
+ Real dyWR = 1; /* wide receiver goes up */
+ Real dyLB = 1; /* line backer follows wide receiver (up)*/
+ 
+ /* Helper Functions */
+ Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
+ Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
+
+End.
+
+ProgramVariables
+
+ Real diffLine; /* Difference in the speed of offernsive and defensive line */
+ Real diffPass; /* Difference in the speed of wide receiver and linebacker */
+
+ Real buffer; /* y- position buffer for WR/LB */
+
+ Real yQB; /* y-position of the quarterback (Angel-team) */
+ Real vyQB; /* magnitude of velocity in y-direction of the quarterback */
+ 
+ Real yA; /* y-position of the offensive line (Angel-team) */
+ Real vyA; /* magnitude of velocity in y-direction of the offensive line */
+ 
+ Real yD; /* y-position of the defensive line (Demon) */
+ Real vyD; /* magnitude of velocity in y-direction of the defensive line */
+ 
+ Real yWR; /* y-position of the wide receiver (Angel-team) */
+ Real vyWR; /* magnitude of velocity in y-direction of the wide receiver */
+ 
+ Real yLB; /* y-position of the linebacker (Demon-team) */
+ Real vyLB; /* magnitude of velocity in y-direction of the linebacker */
+
+ Real t; /* Running time of the play*/
+
+End.
+
+Problem
+  ( /* 0 <= yQB & yQB <= 150 /* Quarterback is in the back half of the field */
+    yQB = 150
+  & yA = yQB + 15 /* OL starts 5 yards above QB */
+  & yD = yA + 3 /* DL starts 1 yard above OL */
+  & yWR = yA /* Start at line of scrimmage with OL */
+  /* & yLB = yD /* Start at line of scrimmage with DL (depends on strategy) */
+  & yLB = (300 + yD) / 2
+  & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
+  & 0 < diffPass & diffPass < Diff /* offset the WR/LB */
+  & buffer = 0
+  & vyQB = 9 /* 9 Walking speed in ft/s */
+  & vyD  = 15.18 /* 15.18 Avg for DL in ft/s from combine */
+  & vyWR = 13.44 /* 13.44 Avg for WR in ft/s from combine */
+  ) ->
+  <
+    vyA  := vyD  - diffLine; /* OL's strength/velocity is always less than DL's */
+    vyLB := vyWR - diffPass; /* LB's strength/velocity is always less than WR's */
+    t:= 0;
+    
+    /* Pre-collision movement, ball getting "hiked" */
+    { yQB' = dyQB*vyQB, 
+      yA'  = dyA*vyA, 
+      yD'  = dyD*vyD, 
+      yWR' = dyWR*vyWR,
+      yLB' = dyLB*vyLB,
+      t' = 1
+      & yA <= yD /* Pre-collision */
+      & t <= T /* Realism */
+    };
+    
+    /* Keep evolving; stop once WR open or realism breaks */
+    {
+      ?(!isOpen(yWR, yLB, buffer));
+      { yQB' = dyQB*vyQB,
+        yD'  = (dyA*vyA + dyD*vyD)/2, /* Dampened Movement */
+        yWR' = dyWR*vyWR,
+        yLB' = dyLB*vyLB,
+        t' = 1
+      & yA >= yD /* Collided */
+      & t <= 1 /* Realism */
+      }
+    }*
+    
+  >( /* yQB < yD /* QB unhurt */
+   isOpen(yWR, yLB, buffer) /* Passed (assuming pass <=> open) */
+   /* & onField(yQB) & onField(yD) 
+   & onField(yWR) & onField(yLB)
+   & t <= T /* Within 40 second play clock */
+   )
+End.
+End.
