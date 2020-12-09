@@ -18,3 +18,4 @@
 ### Notes for Paper: 
 
 - Have a paragraph for explaining Domain Constraints and why we have them in place
+- Why we can have QB unhurt in domain constraint. Originally in Lab 2, we want to cover opposite case for ODE. But in diamond case, it's ok since it's \exists not \forall. If anything it's the responsibility of the angel / your agent to enforce the domain constraint.
