@@ -3,18 +3,20 @@ ArchiveEntry "STAR LAB TRIAL 2"
 Definitions
 
  Real Diff = 2; /* maximum difference in faceups between OL/DL or WR/LB */
- Real T = 40; /* time bound of a play, 40 secondsx*/
+ Real T = 40; /* time bound of a play, 40 seconds */
 
  /* Direction of velocity in y-direction */
  Real dyQB = -1; /* quarterback goes down */
  Real dyA = 1; /* offensive line goes up */
  Real dyD = -1; /* defensive line collides against OL (down) */
  Real dyWR = 1; /* wide receiver goes up */
- Real dyLB = 1; /* line backer follows wide receiver (up)*/
+ /* Real dyLB = 1; /* line backer follows wide receiver (up) Strat Bad */
+ Real dyLB = -1; /* line backer follows wide receiver (down) Strat Good */
 
  /* Helper Functions */
  Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
- Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
+ /* Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
+ Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yWR + buffer < yLB; /* WR not yet tackled by LB */
 
 End.
 
@@ -45,15 +47,16 @@ ProgramVariables
 End.
 
 Problem
-  ( 0 <= yQB & yQB <= 150 /* Quarterback is in the back half of the field */
+  ( yQB = 150 /* Quarterback starts at half way point */
   & yA = yQB + 15 /* OL starts 5 yards above QB */
   & yD = yA + 3 /* DL starts 1 yard above OL */
   & yWR = yA /* Start at line of scrimmage with OL */
-  & yLB = yD /* Start at line of scrimmage with DL (depends on strategy) */
+  /*& yLB = yD /* Start at line of scrimmage with DL (Strat Bad) */
+  & yLB = (yD + 300) / 2 /* Start at safe distance (Strat Good) */
   & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
   & 0 < diffPass & diffPass < Diff /* offset the WR/LB */
   & buffer = 0
-  & vyQB = 9 /* Walking speed in ft/s */
+  & vyQB = 4.6 /* Walking speed in ft/s */
   & vyD  = 15.18 /* Avg for DL in ft/s from combine */
   & vyWR = 13.44 /* Avg for WR in ft/s from combine */
   ) ->
@@ -71,7 +74,7 @@ Problem
       t' = 1
       & yA <= yD /* Pre-collision */
       & t <= T /* Realism */
-    };
+    }
 
     /* Keep evolving; stop once WR open or realism breaks */
     { yQB' = dyQB*vyQB,
@@ -80,7 +83,6 @@ Problem
       yLB' = dyLB*vyLB,
       t' = 1
     & yA >= yD /* Collided */
-    & !isOpen(yWR, yLB, buffer) /* WR not open */
     & t <= T /* Realism */
     }
 
