@@ -59,8 +59,8 @@ Problem
   & 0 < diffPass & diffPass < Diff /* offset the WR/LB */
   & buffer = 0
   & vyQB = 4.6 /* Walking speed in ft/s */
-  & vyD  = 15.18 /* Avg for DL in ft/s from combine */
-  & vyWR = 13.44 /* Avg for WR in ft/s from combine */
+  & vyD  = 23.72 /* Avg for DL in ft/s from combine */
+  & vyWR = 26.79 /* Avg for WR in ft/s from combine */
   ) ->
   <
     vyA  := vyD  - diffLine; /* OL's strength/velocity is always less than DL's */
