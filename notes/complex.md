@@ -10,6 +10,14 @@
 - Another idea for WR Open : making it a function, and having it = prev def of Open & y >= 240
 - Possibly introduce changing dy and vy, using controller first and then dy' and vy'
 
+### What We Are Solving For:
+
+##### Tradeoff between how far back LB starts and diffPass: 
+- Given an arbitrary initial yLB, what is our minimum diffPass (and how does it change in relation to the QB's start)
+- Given an arbitrary diffPass, what is the maximum initial LB (and how does it change in relation to the QB's start)
+- Can we create/solve some multivariable equation that shows relation between diffPass, yLB, and yQB?
+
+
 ### Common Bugs:
 - Lower bound by lower case `diff`
 - Not expanding definitions 
