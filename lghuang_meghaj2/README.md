@@ -15,3 +15,4 @@ Github repository: https://github.com/lenghuang/Football-CPS
 - `3_Future.kyx` - An unproved model that has many of the ideas
   we would like to implement including an advanced QB controller,
   Dynamic Game Logic, and a consideration of the Man defense scenario.
+- `lghuang_meghaj2.pdf` - Term paper
