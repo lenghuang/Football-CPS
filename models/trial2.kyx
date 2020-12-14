@@ -10,8 +10,8 @@ Definitions
  Real dyA = 1; /* offensive line goes up */
  Real dyD = -1; /* defensive line collides against OL (down) */
  Real dyWR = 1; /* wide receiver goes up */
- /* Real dyLB = 1; /* line backer follows wide receiver (up) Strat Bad */
- Real dyLB = -1; /* line backer follows wide receiver (down) Strat Good */
+ /* Real dyLB = 1; /* line backer follows wide receiver (up) Man */
+ Real dyLB = -1; /* line backer follows wide receiver (down) Zone */
 
  /* Helper Functions */
  Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
@@ -51,8 +51,8 @@ Problem
   & yA = yQB + 15 /* OL starts 5 yards above QB */
   & yD = yA + 3 /* DL starts 1 yard above OL */
   & yWR = yA /* Start at line of scrimmage with OL */
-  /*& yLB = yD /* Start at line of scrimmage with DL (Strat Bad) */
-  & yLB = (yD + 300) / 2 /* Start at safe distance (Strat Good) */
+  /*& yLB = yD /* Start at line of scrimmage with DL (Man) */
+  & yLB = (yD + 300) / 2 /* Start at safe distance (Zone) */
   & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
   & 0 < diffPass & diffPass < Diff /* offset the WR/LB */
   & buffer = 0
