@@ -5,7 +5,8 @@ Definitions
  Real Diff = 2; /* maximum difference in faceups between OL/DL or WR/LB */
  Real T = 40; /* time bound of a play, 40 seconds */
  /* ask about this */
- Real maxPass = 100; /* 100 = passing heuristic (Len), 200 = human limits (Megha) in feet */
+ Real maxPass = 100; /* Passing Heuristic */
+ /* Real maxPass = 200; /* Restriction on physics */
 
  /* Direction of velocity in y-direction */
  Real dyA = 1; /* offensive line goes up */
@@ -15,14 +16,15 @@ Definitions
 
  /* Helper Functions */
  Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
- Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
+ /* Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB (Man) */
+ Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yWR + buffer < yLB; /* LB not at WR (Zone) */
  Real dist(Real a, Real b) = abs(a - b); /* Since we are in 1 dimension, just diff in pos*/
 
 End.
 
 ProgramVariables
 
- Real diffLine; /* Difference in the speed of offernsive and defensive line */
+ Real diffLine; /* Difference in the speed of offensive and defensive line */
  Real diffPass; /* Difference in the speed of wide receiver and linebacker */
 
  Real buffer; /* y- position buffer for WR/LB */
@@ -52,8 +54,8 @@ Problem
   & yA = yQB + 15 /* OL starts 5 yards above QB */
   & yD = yA + 3 /* DL starts 1 yard above OL */
   & yWR = yA /* Start at line of scrimmage with OL */
-  & yLB = yD /* Start at line of scrimmage with DL (Strategy 1) */
-  /* yLB = (yD + 300) / 2/* Start at line of scrimmage with DL (Strategy 2) */
+  & yLB = yD /* Start at line of scrimmage with DL (Man) */
+  /* yLB = (yD + 300) / 2/* Start back (Zone) */
   & 0 < diffLine & diffLine < Diff /* offset the OL/DL */
   & 0 < diffPass & diffPass < Diff /* offset the WR/LB */
   & buffer = 0
@@ -62,8 +64,13 @@ Problem
   & vyWR = 13.44 /* Avg for WR in ft/s from combine */
   ) ->
   <
-    vyA  := vyD  - diffLine; /* OL's strength/velocity is always less than DL's */
-    vyLB := vyWR - diffPass; /* LB's strength/velocity is always less than WR's */
+    {
+      vyA := *; /* Demon chooses vyA speed to approach QB quicker */
+      ?(0 < vyD - vyA & vyD - vyA < diffLine); /* ensure realistic velocity */
+      vyLB := *; /* Demon chooses vyLB to best defend against WR */
+      ?(0 < vyWR - vyLB & vyWR - vyLB < diffPass); /* ensure realistic velocity */
+    }^@
+
     t:= 0;
 
     /* Pre-collision movement, ball getting "hiked" */
@@ -90,8 +97,7 @@ Problem
       & yA >= yD /* Collided */
       & !isOpen(yWR, yLB, buffer) /* WR not open */
       & t <= 1 /* Time Triggered */
-      /* ask about this */
-      & yQB < yD /* Prevent scenario where we go safe -> unsafe -> safe? */
+      & yQB < yD
       }
     }*
 
@@ -103,3 +109,4 @@ Problem
    )
 End.
 End.
+

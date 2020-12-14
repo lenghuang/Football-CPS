@@ -15,8 +15,8 @@ Definitions
 
  /* Helper Functions */
  Bool onField(Real y) <-> 0 <= y & y <= 300; /* Player is on the field */
- /* Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB */
- Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yWR + buffer < yLB; /* WR not yet tackled by LB */
+ /* Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yLB + buffer < yWR; /* WR ran past LB (Man) */
+ Bool isOpen(Real yWR, Real yLB, Real buffer) <-> yWR + buffer < yLB; /* LB not at WR (Zone) */
 
 End.
 
